@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: vertex
+    description: Vertex calculation operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /calculate-vertex:
+    post:
+      operationId: calculateVertex
+      tags: [vertex]
+      summary: Calculate Vertex sign
+      description: Calculates the astrological Vertex sign from birth date, time, and location using Swiss Ephemeris
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VertexRequest"
+      responses:
+        "200":
+          description: Vertex calculation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VertexResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +66,56 @@ components:
           type: string
       required:
         - status
-
+    VertexRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User's name
+        date:
+          type: string
+          description: Birth date in YYYY-MM-DD format
+        time:
+          type: string
+          description: Birth time in HH:MM format (local time)
+        lat:
+          type: number
+          description: Latitude of birth city
+        lon:
+          type: number
+          description: Longitude of birth city
+        timezone:
+          type: string
+          description: IANA timezone string for the birth city
+      required:
+        - date
+        - time
+        - lat
+        - lon
+    VertexResponse:
+      type: object
+      properties:
+        vertex_degree:
+          type: number
+          description: Vertex longitude (0-360 degrees)
+        vertex_sign:
+          type: string
+          description: Zodiac sign of the Vertex
+        vertex_degree_in_sign:
+          type: number
+          description: Degree within the zodiac sign (0-30)
+        name:
+          type: string
+          description: User's name (echoed back)
+      required:
+        - vertex_degree
+        - vertex_sign
+        - vertex_degree_in_sign
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+      required:
+        - error

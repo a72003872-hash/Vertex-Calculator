@@ -1,0 +1,196 @@
+Create a full-stack Vertex Calculator web app using Node.js and Swiss Ephemeris (swisseph).
+
+GOAL:
+Build an accurate astrology tool that calculates the Vertex sign based on birth date, time, and location using Swiss Ephemeris (not approximations).
+
+---
+
+## FRONTEND REQUIREMENTS:
+
+Create a clean, minimal form (NO header, footer, hero section).
+
+Fields required:
+1. Your Name 
+
+   * Input type:  Enter Name
+
+1. Birth Date
+
+   * Input type: date
+
+2. Birth Time
+
+   * Input type: time (24-hour format)
+
+3. Birth City
+
+   * Text input with autocomplete dropdown
+   * Use OpenStreetMap Nominatim API:
+     https://nominatim.openstreetmap.org/search?format=json&q=
+
+4. Submit Button:
+
+   * Label: "Calculate Vertex"
+
+5. After result:
+
+   * Show result section below form
+   * Include "Calculate Again" button (resets form)
+
+---
+
+## BACKEND REQUIREMENTS:
+
+Use Node.js with Express.
+
+Install dependencies:
+
+* express
+* swisseph
+* axios
+* cors
+
+---
+
+## CORE LOGIC (IMPORTANT):
+
+1. Convert user birth date + time into Julian Day (UTC)
+
+2. Use Swiss Ephemeris:
+
+   * swe_houses_ex()
+
+3. Extract:
+
+   * Vertex = houses.vertex
+
+4. Convert Vertex longitude (0–360°) into zodiac sign:
+
+Zodiac mapping:
+0–30 Aries
+30–60 Taurus
+60–90 Gemini
+90–120 Cancer
+120–150 Leo
+150–180 Virgo
+180–210 Libra
+210–240 Scorpio
+240–270 Sagittarius
+270–300 Capricorn
+300–330 Aquarius
+330–360 Pisces
+
+---
+
+## API ROUTE:
+
+POST /calculate-vertex
+
+Request body:
+{
+date: "YYYY-MM-DD",
+time: "HH:MM",
+lat: number,
+lon: number
+}
+
+Response:
+{
+vertex_degree: number,
+vertex_sign: string
+}
+
+---
+
+## TIME HANDLING:
+
+* Convert local time to UTC
+* Use JavaScript Date properly
+* Ensure timezone correctness
+
+---
+
+## SWISS EPHEMERIS SETUP:
+
+* Import swisseph
+* Set ephemeris path (use local ephemeris files or default)
+
+Example:
+swe.swe_set_ephe_path('./ephe');
+
+---
+
+## VERTEX CALCULATION (CRITICAL):
+
+Use:
+swe.swe_houses_ex(julianDay, flags, latitude, longitude, houseSystem)
+
+House system:
+
+* Use Placidus ("P")
+
+Extract:
+
+* houses.vertex
+
+---
+
+## FRONTEND BEHAVIOR:
+
+* On submit:
+  → Fetch lat/lon from selected city
+  → Send to backend
+  → Display result
+
+* Show:
+  Vertex Sign (large text)
+  Degree (small text)
+
+---
+
+## ERROR HANDLING:
+
+* Show error if:
+
+  * Invalid input
+  * City not found
+  * API failure
+
+---
+
+## UI STYLE:
+
+* Centered form
+* Minimal design
+* Smooth loading state
+* No unnecessary sections
+
+---
+
+## BONUS (IF POSSIBLE):
+
+* Add loading spinner
+* Add validation
+* Add debounce in city search
+
+---
+
+## OUTPUT FORMAT:
+
+Return full working project:
+
+* server.js
+* package.json
+* frontend (index.html + JS)
+
+Ensure the app runs with:
+npm install
+node server.js
+
+---
+
+IMPORTANT:
+Do NOT use fake or approximate formulas.
+Use Swiss Ephemeris only for accurate astronomical calculation.
+
+---

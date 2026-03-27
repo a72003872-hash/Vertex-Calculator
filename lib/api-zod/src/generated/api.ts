@@ -14,3 +14,28 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Calculates the astrological Vertex sign from birth date, time, and location using Swiss Ephemeris
+ * @summary Calculate Vertex sign
+ */
+export const CalculateVertexBody = zod.object({
+  name: zod.string().optional().describe("User's name"),
+  date: zod.string().describe("Birth date in YYYY-MM-DD format"),
+  time: zod.string().describe("Birth time in HH:MM format (local time)"),
+  lat: zod.number().describe("Latitude of birth city"),
+  lon: zod.number().describe("Longitude of birth city"),
+  timezone: zod
+    .string()
+    .optional()
+    .describe("IANA timezone string for the birth city"),
+});
+
+export const CalculateVertexResponse = zod.object({
+  vertex_degree: zod.number().describe("Vertex longitude (0-360 degrees)"),
+  vertex_sign: zod.string().describe("Zodiac sign of the Vertex"),
+  vertex_degree_in_sign: zod
+    .number()
+    .describe("Degree within the zodiac sign (0-30)"),
+  name: zod.string().optional().describe("User's name (echoed back)"),
+});

@@ -5,18 +5,26 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  ErrorResponse,
+  HealthStatus,
+  VertexRequest,
+  VertexResponse,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -99,3 +107,90 @@ export function useHealthCheck<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * Calculates the astrological Vertex sign from birth date, time, and location using Swiss Ephemeris
+ * @summary Calculate Vertex sign
+ */
+export const getCalculateVertexUrl = () => {
+  return `/api/calculate-vertex`;
+};
+
+export const calculateVertex = async (
+  vertexRequest: VertexRequest,
+  options?: RequestInit,
+): Promise<VertexResponse> => {
+  return customFetch<VertexResponse>(getCalculateVertexUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(vertexRequest),
+  });
+};
+
+export const getCalculateVertexMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof calculateVertex>>,
+    TError,
+    { data: BodyType<VertexRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof calculateVertex>>,
+  TError,
+  { data: BodyType<VertexRequest> },
+  TContext
+> => {
+  const mutationKey = ["calculateVertex"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof calculateVertex>>,
+    { data: BodyType<VertexRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return calculateVertex(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CalculateVertexMutationResult = NonNullable<
+  Awaited<ReturnType<typeof calculateVertex>>
+>;
+export type CalculateVertexMutationBody = BodyType<VertexRequest>;
+export type CalculateVertexMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Calculate Vertex sign
+ */
+export const useCalculateVertex = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof calculateVertex>>,
+    TError,
+    { data: BodyType<VertexRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof calculateVertex>>,
+  TError,
+  { data: BodyType<VertexRequest> },
+  TContext
+> => {
+  return useMutation(getCalculateVertexMutationOptions(options));
+};

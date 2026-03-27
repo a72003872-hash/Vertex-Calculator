@@ -48,6 +48,18 @@ Every package extends `tsconfig.base.json` which sets `composite: true`. The roo
 - `pnpm run build` — runs `typecheck` first, then recursively runs `build` in all packages that define it
 - `pnpm run typecheck` — runs `tsc --build --emitDeclarationOnly` using project references
 
+## Artifacts
+
+### `artifacts/vertex-calculator` (`@workspace/vertex-calculator`)
+
+React + Vite frontend for the Vertex Calculator astrology app.
+
+- Entry: `src/App.tsx` — sets up routing
+- Main page: `src/pages/calculator.tsx` — form with city autocomplete, vertex result display
+- City search hook: `src/hooks/use-city-search.ts` — OpenStreetMap Nominatim API with debounce
+- Styles: `src/index.css` — dark spiritual theme
+- Served at `/` (root path)
+
 ## Packages
 
 ### `artifacts/api-server` (`@workspace/api-server`)

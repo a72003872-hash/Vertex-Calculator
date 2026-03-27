@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Vertex Calculator"
+version = "1.0.0"
+id = "artifacts/vertex-calculator"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 26098
+
+[services.development]
+run = "pnpm --filter @workspace/vertex-calculator run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/vertex-calculator", "run", "build" ]
+publicDir = "artifacts/vertex-calculator/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "26098"
+BASE_PATH = "/"

@@ -8,3 +8,34 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface VertexRequest {
+  /** User's name */
+  name?: string;
+  /** Birth date in YYYY-MM-DD format */
+  date: string;
+  /** Birth time in HH:MM format (local time) */
+  time: string;
+  /** Latitude of birth city */
+  lat: number;
+  /** Longitude of birth city */
+  lon: number;
+  /** IANA timezone string for the birth city */
+  timezone?: string;
+}
+
+export interface VertexResponse {
+  /** Vertex longitude (0-360 degrees) */
+  vertex_degree: number;
+  /** Zodiac sign of the Vertex */
+  vertex_sign: string;
+  /** Degree within the zodiac sign (0-30) */
+  vertex_degree_in_sign: number;
+  /** User's name (echoed back) */
+  name?: string;
+}
+
+export interface ErrorResponse {
+  /** Error message */
+  error: string;
+}

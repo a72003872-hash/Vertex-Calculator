@@ -1,0 +1,16 @@
+packages:
+  "framer-motion": "For elegant, smooth spiritual transitions and page reveals"
+  "lucide-react": "For crisp, minimal icons"
+  "react-hook-form": "For robust form state management"
+  "@hookform/resolvers": "For Zod schema validation in forms"
+  "zod": "For strict schema validation"
+  "use-debounce": "For debouncing the Nominatim API city search"
+
+images:
+  - path: "artifacts/vertex-calculator/public/images/mystic-bg.png"
+    description: "A very subtle, abstract, elegant spiritual background. Dark muted indigo and charcoal tones with faint, soft gold dust or subtle celestial geometric lines. Extremely minimal, suitable as a background for a glassmorphism card."
+    aspect_ratio: "16:9"
+
+notes:
+  - Using Nominatim API for city search (https://nominatim.openstreetmap.org/search)
+  - Assuming backend handles timezone inference from lat/lon or defaults to UTC if omitted, as Nominatim doesn't provide standard IANA timezones directly.
