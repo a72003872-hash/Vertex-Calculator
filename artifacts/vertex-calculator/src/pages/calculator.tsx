@@ -79,22 +79,6 @@ export default function CalculatorPage() {
       />
 
       <div className="w-full max-w-lg z-10 relative">
-        <div className="text-center mb-10">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <Sparkles className="w-8 h-8 text-primary mx-auto mb-4 opacity-80" />
-            <h1 className="text-4xl sm:text-5xl mb-3 text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 drop-shadow-sm">
-              Vertex Calculator
-            </h1>
-            <p className="text-muted-foreground text-sm sm:text-base max-w-sm mx-auto font-light">
-              Discover your destined encounters and profound turning points written in the stars.
-            </p>
-          </motion.div>
-        </div>
-
         <motion.div 
           className="glass-panel rounded-[2rem] p-6 sm:p-10 relative overflow-visible"
           layout
@@ -252,9 +236,6 @@ export default function CalculatorPage() {
           </AnimatePresence>
         </motion.div>
         
-        <p className="text-center text-xs text-muted-foreground mt-8 opacity-50 tracking-wide">
-          Powered by Swiss Ephemeris for absolute precision
-        </p>
       </div>
     </div>
   );
